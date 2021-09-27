@@ -52,7 +52,7 @@ RUN docker-php-ext-install gd
 RUN a2enmod rewrite headers
 
 # copy project files
-COPY ./ /var/www/html
+COPY ./public/ /var/www/html
 
 # set permissions
 RUN chmod -R 777 /var/www
