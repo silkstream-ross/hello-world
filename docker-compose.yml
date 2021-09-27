@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  hello_world_webserver:
+    build:
+      context: ./
+      dockerfile: dev/docker/webserver/Dockerfile
+    container_name: 'hello_world_webserver'
+    ports:
+      - "80:80"
+      - "443:443"
+      - "2020:2020"
+    links:
+      - hello_world_database
+  hello_world_database:
+    image: mysql:5.6
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;'
+    container_name: 'hello_world_database'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: dev_database
+      MYSQL_DATABASE: dev_database
+      MYSQL_USER: dev_database
+      MYSQL_PASSWORD: dev_database
+  hello_world_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'hello_world_phpmyadmin'
+    links:
+      - hello_world_database
+    environment:
+      PMA_HOST: hello_world_database
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 500M
+    ports:
+      - '8080:80'
